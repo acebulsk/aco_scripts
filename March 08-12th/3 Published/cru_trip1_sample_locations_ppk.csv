@@ -1,0 +1,27 @@
+ID,alias,Plot_ID,northing,easting,elev,date,solution,aspect,cover,station_type
+Refpointwxb,Refpointwxb,na,5504506.959,329592.288,1366.284,20210309,single,,,wx
+CRU_wxCAM_stake1,CRU_wx_stake1,CRU_wx_cam_stks,5504515.994,329592.7672,1363.877,20210309,fix,east,sparse,camera
+CRU_wxCAM_stake2,CRU_wx_stake2,CRU_wx_cam_stks,5504524.724,329594.3102,1363.121,20210309,fix,east,sparse,camera
+CRU_wxCAM_stake3,CRU_wx_stake3,CRU_wx_cam_stks,5504527.171,329600.8862,1362.224,20210309,fix,east,sparse,camera
+CRU_wxCAM_stake4,CRU_wx_stake4,CRU_wx_cam_stks,5504516.819,329601.0372,1362.983,20210309,fix,east,sparse,camera
+CRU_wxCAM_stake5,CRU_wx_stake5,CRU_wx_cam_stks,5504520.877,329606.2532,1362.198,20210309,fix,east,sparse,camera
+CRU_wx_SR50,CRU_wx_SR50,CRU_wx_SR50,5504506.263,329593.2492,1364.559,20210309,fix,east,sparse,wx
+CRU_snowsurvey_start,CRU_snowsurvey_start,CRU_snowsurvey,5504510.233,329583.5652,1363.666,20210309,fix,east,sparse,wx
+CRU_snowsurvey_end,CRU_snowsurvey_end,CRU_snowsurvey,5504536.545,329588.6692,1362.234,20210309,fix,east,sparse,wx
+CRU_snowpillow,CRU_snowpillow,CRU_snowpillow,5504501.587,329590.9172,1364.26,20210309,fix,east,sparse,wx
+CRU_tempplot,CRU_tempplot,CRU_tempplot,5504501.895,329597.3012,1363.93,20210309,fix,east,sparse,pit
+CRU_E3S,Cru_e3s,CRU_E3S,5504539.82,329433.7262,1400.249,20210310,fix,east,sparse,cardinal_10
+CRU_N3O,Cru_n3O,CRU_N3O,5504640.405,328984.9362,1414.329,20210310,fix,north,open,cardinal_10
+CRU_N4S,CRU_N4S,CRU_N4S,5505112.319,328490.0972,1264.499,20210310,eyeballed,north,sparse,cardinal_10
+CRU_baseref_20210311,CRU_baseref_20210311,na,5504506.959,329592.288,1366.284,20210311,single,,,wx
+CRU_CAM2_NG_1,CRU_c2_ng_1,CRU-CAM2-NG,5503668.299,330642.717,1016.979,20210311,fix,east,new growth,camera
+CRU_CAM2_NG_2,CRU_c2_ng_3,CRU-CAM2-NG,5503665.475,330643.835,1016.239,20210311,fix,east,new growth,camera
+CRU_CAM2_NG_3,CRU_c2_ng_2,CRU-CAM2-NG,5503664.547,330646.838,1015.447,20210311,fix,east,new growth,camera
+CRU_CAM2_NG_4,CRU_c2_ng_4,CRU-CAM2-NG,5503661.458,330647.069,1014.817,20210311,fix,east,new growth,camera
+CRU_CAM2_NG_5,CRU_c2_ng_5,CRU-CAM2-NG,5503664.06,330642.875,1016.232,20210311,fix,east,new growth,camera
+CRU_E7S,CRU_20210311_E7S,CRU_E7S,5503354.312,330731.366,981.641,20210311,float,east,sparse,cardinal_10
+CRU_CAM3_OG_1,CRU_20210311_C3_stk_1,CRU-CAM3-OG,5503356.607,330745.872,982.459,20210311,float,east,sparse,camera
+CRU_CAM3_OG_2,CRU_20210311_C3_stk_2,CRU-CAM3-OG,5503357.865,330747.5,981.585,20210311,fix,east,sparse,camera
+CRU_CAM3_OG_3,CRU_20210311_C3_stk_3,CRU-CAM3-OG,5503356.689,330747.201,981.65,20210311,fix,east,sparse,camera
+CRU_CAM3_OG_4,CRU_20210311_C3_stk_4,CRU-CAM3-OG,5503356.332,330747.901,981.648,20210311,fix,east,sparse,camera
+CRU_CAM3_OG_5,CRU_20210311_C3_stk_5,CRU-CAM3-OG,5503354.354,330747.144,980.931,20210311,float,east,sparse,camera
