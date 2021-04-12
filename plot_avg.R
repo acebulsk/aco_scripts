@@ -9,7 +9,7 @@ library(tidyr)
 
 ##### get rov coords #####
 
-coord <- read_csv("March 08-12th//3 Published/cru_trip1_sample_locations_ppk.csv") %>%
+coord <- read_csv("March 08-12th/3 Published/cru_trip1_sample_locations_ppk.csv") %>%
   group_by(Plot_ID) %>%  # do average for camera stations
   summarise(northing = mean(northing),
             easting = mean(easting),
