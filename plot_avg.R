@@ -235,7 +235,12 @@ plt_avg <- all_samples %>%
 
 # write out
 
-write_csv(all_dat, "March 08-12th/3 Published/2021_cru_trip1_snowdata_ppk.csv")
+# write_csv(all_dat, "April_5-9_trip2/3 Published/2021_cru_trip2_allsnowdata_ppk.csv")
+write_csv(plt_avg, "April_5-9_trip2/3 Published/cru_trip2_plot_averages.csv")
+
+write_csv(dly_depth_totals, "April_5-9_trip2/3 Published/cru_trip2_depth_total.csv")
+
+write_csv(dly_density_totals, "April_5-9_trip2/3 Published/cru_trip2_density_total.csv")
 
 # graphs
 
