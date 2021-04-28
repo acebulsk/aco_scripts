@@ -89,7 +89,7 @@ snow_course <- wx_df %>%
          core_number != 5) %>% # mass entered wrong on form could still use depths but have lots and all similar.
   mutate(
          depth = depth - plug,
-         SWE = mass / (3.142 * (2.1 * 2.1)),
+         SWE = mass / (3.14159265359 * (2.1 * 2.1)),
          density = SWE / (depth)
          )
 
