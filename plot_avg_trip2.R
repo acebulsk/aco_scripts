@@ -8,25 +8,27 @@ library(ggplot2)
 library(tidyr)
 library(lubridate)
 
+setwd("E:/Alex_Working/ACO/Cruickshank")
+
 ##### get rov coords #####
 
-# trip 1
-coord1 <- read_csv("March 08-12th/3 Published/cru_trip1_sample_locations_ppk.csv") %>%
-  select(-alias, -Plot_ID, -date, Plot_ID = ID) %>%
-  filter(!Plot_ID %in% c("Refpointwxb", "CRU_baseref_20210311"))
-
-# calculate average for cameras
-coord_plot_average <- read_csv("March 08-12th/3 Published/cru_trip1_sample_locations_ppk.csv") %>%
-  select(-alias, -date, -ID) %>%
-  filter(Plot_ID != "na") %>%
-  group_by(Plot_ID) %>%  # do average for camera stations
-  summarise(northing = mean(northing),
-            easting = mean(easting),
-            elev = mean(elev),
-            solution = first(solution),
-            aspect = first(aspect),
-            cover = first(cover),
-            station_type = first(station_type))
+# # trip 1
+# coord1 <- read_csv("March 08-12th/3 Published/cru_trip1_sample_locations_ppk.csv") %>%
+#   select(-alias, -Plot_ID, -date, Plot_ID = ID) %>%
+#   filter(!Plot_ID %in% c("Refpointwxb", "CRU_baseref_20210311"))
+#
+# # calculate average for cameras
+# coord_plot_average <- read_csv("March 08-12th/3 Published/cru_trip1_sample_locations_ppk.csv") %>%
+#   select(-alias, -date, -ID) %>%
+#   filter(Plot_ID != "na") %>%
+#   group_by(Plot_ID) %>%  # do average for camera stations
+#   summarise(northing = mean(northing),
+#             easting = mean(easting),
+#             elev = mean(elev),
+#             solution = first(solution),
+#             aspect = first(aspect),
+#             cover = first(cover),
+#             station_type = first(station_type))
 
 # trip 2
 # coord2 <- read_csv("April_5-9_trip2/1 Raw/Data Collector/20210405_20210410_points.txt",
@@ -68,7 +70,7 @@ coord_final <- left_join(coord_utm, coord_geo)
 ##### get weather station form ####
 
 # weather station form that has wx snow course
-wx_df <- read_csv("April_5-9_trip2/1 Raw/Weather Station Visit Form - Weather Station Visit - v1.14_raw.csv") %>%
+wx_df <- read_csv("2April_5-9_trip2/1 Raw/Weather Station Visit Form - Weather Station Visit - v1.14_raw.csv") %>%
   select(Job_Start_Time, Vancouver_Island_Stations, starts_with("Snow_Course")) %>%
   filter(Vancouver_Island_Stations == "Upper Cruickshank")
 
@@ -175,7 +177,7 @@ sr50 <- wx_df %>%
 ##### ACO Device Magic Form #####
 
 # get raw device magic tbl (most recent version)
-raw <- read_csv("April_5-9_trip2/1 Raw/ACO Ground Truth Plot - ACO Snow Survey Plot (use this one) - v1.72_raw.csv") %>%
+raw <- read_csv("2April_5-9_trip2/1 Raw/ACO Ground Truth Plot - ACO Snow Survey Plot (use this one) - v1.72_raw.csv") %>%
   select(Survey_Start_Time,
          Study_Area,
          Plot_ID,
@@ -190,7 +192,7 @@ raw <- read_csv("April_5-9_trip2/1 Raw/ACO Ground Truth Plot - ACO Snow Survey P
   filter(Study_Area == "Cruickshank", is.na(depth) == F)
 
 # get older dm from version that rob used on his phone
-raw_old <- read_csv("April_5-9_trip2/1 Raw/ACO Ground Truth Plot - ACO Snow Survey Plot (use this one) - v1.61.csv") %>%
+raw_old <- read_csv("2April_5-9_trip2/1 Raw/ACO Ground Truth Plot - ACO Snow Survey Plot (use this one) - v1.61.csv") %>%
   select(Survey_Start_Time,
          Study_Area,
          Plot_ID,
@@ -205,7 +207,9 @@ raw_old <- read_csv("April_5-9_trip2/1 Raw/ACO Ground Truth Plot - ACO Snow Surv
   filter(Study_Area == "Cruickshank", is.na(depth) == F) %>%
   slice(95:130) # grab all
 
-raw <- rbind(raw, raw_old)
+raw <- rbind(raw, raw_old) %>%
+  mutate(plug = replace_na(plug, 0))
+
 
 # fix cores done in multiple tries
 multi <- raw %>%
@@ -219,8 +223,9 @@ multi_calc <- multi %>%
     plug = sum(plug, na.rm = T),
     mass = sum(mass, na.rm = T)) %>%
   mutate(
+    depth = depth - plug,
     SWE = mass / (3.14159265359 * (2.1 * 2.1)),
-    density = SWE / (depth - plug)
+    density = SWE / (depth)
   )
 
 multi_final <- multi %>%
@@ -232,8 +237,9 @@ multi_final <- multi %>%
 fltr <- raw %>%
   filter(multi_core == "no" | is.na(multi_core) == T) %>%
   mutate(
+    depth = depth - plug,
     SWE = mass / (3.14159265359 * (2.1 * 2.1)),
-    density = SWE / (depth - plug)
+    density = SWE / (depth )
   ) %>%
   rbind(multi_final)
 
@@ -244,7 +250,7 @@ all_samples <- fltr %>%
   select(Survey_Start_Time:Plot_ID, easting:lat, plot_type:density) %>%
   mutate(Survey_Start_Time = mdy_hm(Survey_Start_Time))
 
-write.csv(all_samples, "April_5-9_trip2/3 Published/cru_trip2_plots_raw.csv", row.names = F)
+write.csv(all_samples, "2April_5-9_trip2/3 Published/cru_trip2_plots_raw_plugs_subtracted.csv", row.names = F)
 
 
 # daily totals for depth
@@ -285,11 +291,11 @@ plt_avg <- all_samples %>%
 # write out
 
 # write_csv(all_dat, "April_5-9_trip2/3 Published/2021_cru_trip2_allsnowdata_ppk.csv")
-write.csv(plt_avg, "April_5-9_trip2/3 Published/cru_trip2_plot_averages.csv", row.names = F)
+write.csv(plt_avg, "2April_5-9_trip2/3 Published/cru_trip2_plot_averages_plugs_subtracted.csv", row.names = F)
 
-write_csv(dly_depth_totals, "April_5-9_trip2/3 Published/cru_trip2_depth_total.csv")
+write_csv(dly_depth_totals, "2April_5-9_trip2/3 Published/cru_trip2_depth_total.csv")
 
-write_csv(dly_density_totals, "April_5-9_trip2/3 Published/cru_trip2_density_total.csv")
+write_csv(dly_density_totals, "2April_5-9_trip2/3 Published/cru_trip2_density_total.csv")
 
 # graphs
 
