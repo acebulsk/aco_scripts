@@ -29,28 +29,28 @@ coord_plot_average <- read_csv("March 08-12th/3 Published/cru_trip1_sample_locat
             station_type = first(station_type))
 
 # trip 2
-coord2 <- read_csv("April_5-9_trip2/1 Raw/Data Collector/20210405_20210410_points.txt",
-                   col_names = c("Plot_ID", "northing", "easting", "elev", "lat", "lon", "elevation")) %>%
-  filter(!Plot_ID %in% c("CRU_wx","CRU_wx2","CRU_wx3")) %>% #rm ref coords
-  select(-lat, -lon, -elevation)
-
-solution <- c("SBAS", "SBAS", "fixed","DGPS", "fixed" ,"fixed" , "fixed", "float", "fixed")
-aspect <- c( "north","south","east","east","east","south","south","south","south")
-cover <- c("alpine", "alpine",  "open", "forest", "forest",  "forest", "forest", "forest", "open")
-station_type <-  c( "cardinal_10", "cardinal_10",  "cardinal_10", "camera", "cardinal_10", "cardinal_10", "cardinal_10", "cardinal_10", "cardinal_10")
-
-coord2_meta <- cbind(coord2, solution, aspect, cover, station_type)
-
-CRU_E6N <- coord1 %>%
-  filter(Plot_ID == "CRU_CAM2_NG_4") %>%  #used camera stake # 4 as centre plot
-  mutate(Plot_ID = "CRU_E6N_C2STK4")
-
-# combine trip 1 and 2 coords
-coord_all <- rbind(coord_plot_average, coord2_meta, CRU_E6N)
-
-coord_trx <- coord_all %>%
-  select(STA = Plot_ID, utm_n = northing, utm_e = easting, height = elev) %>%
-  mutate(utm_z = "utm10")
+# coord2 <- read_csv("April_5-9_trip2/1 Raw/Data Collector/20210405_20210410_points.txt",
+#                    col_names = c("Plot_ID", "northing", "easting", "elev", "lat", "lon", "elevation")) %>%
+#   filter(!Plot_ID %in% c("CRU_wx","CRU_wx2","CRU_wx3")) %>% #rm ref coords
+#   select(-lat, -lon, -elevation)
+#
+# solution <- c("SBAS", "SBAS", "fixed","DGPS", "fixed" ,"fixed" , "fixed", "float", "fixed")
+# aspect <- c( "north","south","east","east","east","south","south","south","south")
+# cover <- c("alpine", "alpine",  "open", "forest", "forest",  "forest", "forest", "forest", "open")
+# station_type <-  c( "cardinal_10", "cardinal_10",  "cardinal_10", "camera", "cardinal_10", "cardinal_10", "cardinal_10", "cardinal_10", "cardinal_10")
+#
+# coord2_meta <- cbind(coord2, solution, aspect, cover, station_type)
+#
+# CRU_E6N <- coord1 %>%
+#   filter(Plot_ID == "CRU_CAM2_NG_4") %>%  #used camera stake # 4 as centre plot
+#   mutate(Plot_ID = "CRU_E6N_C2STK4")
+#
+# # combine trip 1 and 2 coords
+# coord_all <- rbind(coord_plot_average, coord2_meta, CRU_E6N)
+#
+# coord_trx <- coord_all %>%
+#   select(STA = Plot_ID, utm_n = northing, utm_e = easting, height = elev) %>%
+#   mutate(utm_z = "utm10")
 
 # write.csv(coord_all, "cru_plot_coords_ppk_final.csv")
 # write.csv(coord_trx, "cru_plot_coords_ppk_final_totrx.csv", rownames = F)
@@ -62,6 +62,8 @@ coord_utm <- read.csv("Scratch/cru_plot_coords_ppk_final_ITRF2014_UTM10.csv")%>%
   select(Plot_ID = station, easting = utm_e, northing = utm_n, elev_ellipsoidal = height)
 
 coord_final <- left_join(coord_utm, coord_geo)
+
+# write.csv(coord_final, "cru_plot_coords_ITRF2014.csv", row.names = F)
 
 ##### get weather station form ####
 
@@ -242,6 +244,9 @@ all_samples <- fltr %>%
   select(Survey_Start_Time:Plot_ID, easting:lat, plot_type:density) %>%
   mutate(Survey_Start_Time = mdy_hm(Survey_Start_Time))
 
+write.csv(all_samples, "April_5-9_trip2/3 Published/cru_trip2_plots_raw.csv", row.names = F)
+
+
 # daily totals for depth
 dly_depth_totals <- all_samples %>%
   mutate(day = substr(Survey_Start_Time, 3,3)) %>%
@@ -276,8 +281,6 @@ plt_avg <- all_samples %>%
     count = n()) %>%
   left_join(coord_final, by = "Plot_ID") %>%
   select(plot_datetime, Study_Area, Plot_ID, easting:lat, plot_type:count)
-
-
 
 # write out
 
