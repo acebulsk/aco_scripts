@@ -85,8 +85,12 @@ snow_course <- wx_df %>%
     mass = sum(Snow_Course.Add_Snow_Core.Mass_Final__g_, na.rm = T),
     rating = mean(Snow_Course.Add_Snow_Core.Core_Rating, na.rm = T)
   ) %>%
-  mutate(SWE = mass / (3.142 * (2.1 * 2.1)),
-         density = SWE / (depth - plug)
+  filter(core_number != 4,
+         core_number != 5) %>% # mass entered wrong on form could still use depths but have lots and all similar.
+  mutate(
+         depth = depth - plug,
+         SWE = mass / (3.142 * (2.1 * 2.1)),
+         density = SWE / (depth)
          )
 
 snow_course_final <- snow_course %>%
@@ -247,7 +251,7 @@ fltr <- raw %>%
 all_samples <- fltr %>%
   rbind(snow_course_final, snow_scale, sr50) %>%
   left_join(coord_final, by = "Plot_ID") %>%
-  select(Survey_Start_Time:Plot_ID, easting:lat, plot_type:density) %>%
+  select(Survey_Start_Time:Plot_ID, easting:lat, plot_type:cardinal_direction, multi_core:density) %>%
   mutate(Survey_Start_Time = mdy_hm(Survey_Start_Time))
 
 write.csv(all_samples, "2April_5-9_trip2/3 Published/cru_trip2_plots_raw_plugs_subtracted.csv", row.names = F)
