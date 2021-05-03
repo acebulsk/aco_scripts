@@ -32,7 +32,11 @@ raw <- read.csv("Digital_Forms/ACO Ground Truth Plot - ACO Snow Survey Plot (use
     Point_Observation.Mass_Final__g_ = case_when(
       Plot_ID == "CRU_S1A" & Point_Observation.Cardinal_Direction == "Centre" ~ as.integer(Point_Observation.Mass___Tube__g_ - 2570),
       TRUE ~ Point_Observation.Mass_Final__g_
-      ))
+      ),
+    depth_final = case_when(
+      Point_Observation.Sample_Type == "Density" ~ Point_Observation.Depth__cm_,
+      Point_Observation.Sample_Type == "Depth" ~ Point_Observation.Depth_Final__cm_
+    ))
 
 fltr <- raw %>%
   select(Survey_Start_Time,
@@ -42,7 +46,7 @@ fltr <- raw %>%
          cardinal_direction = Point_Observation.Cardinal_Direction,
          sample_type = Point_Observation.Sample_Type,
          multi_core = Point_Observation.Multi_Part_Core_,
-         depth = Point_Observation.Depth__cm_,
+         depth = depth_final,
          core = Point_Observation.Core_Length__cm_,
          plug = Point_Observation.Plug__cm_,
          mass = Point_Observation.Mass_Final__g_) %>%
@@ -129,9 +133,9 @@ plt_avg <- all_final %>%
 # write_csv(all_dat, "April_5-9_trip2/3 Published/2021_cru_trip2_allsnowdata_ppk.csv")
 write.csv(plt_avg, "Deliverables/cru_trip3_plot_averages.csv", row.names = F)
 
-write_csv(dly_depth_totals, "Deliverables/cru_trip3_depth_total.csv")
+write_csv(dly_depth_totals, "Deliverables/cru_trip3_depth_total2.csv")
 
-write_csv(dly_density_totals, "Deliverables/cru_trip3_density_total.csv")
+write_csv(dly_density_totals, "Deliverables/cru_trip3_density_total2.csv")
 
 # graphs
 
