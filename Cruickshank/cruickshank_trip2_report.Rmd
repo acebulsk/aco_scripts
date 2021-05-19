@@ -1,0 +1,64 @@
+---
+title: "Cruickshank Trip 2 Summary"
+author: "Surveyors: Alex, Rob, Emily"
+date: "4/5/2021"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+library(tmap)
+library(sf)
+```
+
+## Spatial
+
+```{r map, echo=FALSE}
+sf <- st_read("cru_plot_coords.csv", options=c("X_POSSIBLE_NAMES=easting","Y_POSSIBLE_NAMES=northing"), crs = 3157) 
+
+sf_wgs_utm <- sf %>% st_transform(st_crs(32610)) %>% 
+  mutate(lon = st_coordinates(.)[,1],
+         lat = st_coordinates(.)[,2]) %>% 
+  st_drop_geometry()
+
+sf_wgs <- sf %>% st_transform(4326) %>% 
+  mutate(lon = st_coordinates(.)[,1],
+         lat = st_coordinates(.)[,2]) %>% 
+  st_drop_geometry()
+
+sf$geometry[,2]
+
+tmap_mode("view")
+
+tmap_leaflet(tm_shape(sf) +
+  tm_tiles(paste0("http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/",
+                  "World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"), group = "satellite") +
+  tm_dots(col = "red"))
+```
+
+## Tables
+
+```{r plots, echo=F}
+plot_avg <- read.csv("April_5-9_trip2/3 Published/cru_trip2_plot_averages.csv")
+
+dpth <- read.csv("April_5-9_trip2/3 Published/cru_trip2_depth_total.csv")
+
+density <- read.csv("April_5-9_trip2/3 Published/cru_trip2_density_total.csv")
+```
+
+### Plot Averages
+```{r}
+plot_avg
+```
+
+### Daily Depth Totals
+```{r}
+dpth
+```
+
+### Daily Density Depth Totals
+```{r}
+density
+```

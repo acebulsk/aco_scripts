@@ -1,0 +1,1 @@
+Cru_0680.21O | Warning : Your high-rate static dataset has been decimated to 30 seconds. For more information, please visit the <a href="https://webapp.geod.nrcan.gc.ca/geod/tools-outils/ppp-info.php?locale=en">CSRS-PPP modernization page</a>
